@@ -5,7 +5,7 @@ from environs import Env
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 env = Env()  # new
-env.read_env(path=BASE_DIR / '.env.dev')  # new
+env.read_env(path='.env.dev')  # new
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
@@ -68,8 +68,12 @@ WSGI_APPLICATION = 'drf_project.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': env.str('SQL_ENGINE', default='django.db.backends.sqlite3'),
+        'NAME': env.str('SQL_DATABASE', default=BASE_DIR / 'db.sqlite3'),  # might be error
+        'USER': env.str('SQL_USER', default='user'),
+        'PASSWORD': env.str('SQL_PASSWORD', default='password'),
+        'HOST': env.str('SQL_HOST', default='localhost'),
+        'PORT': env.str('SQL_PORT', default='5432'),
     }
 }
 
